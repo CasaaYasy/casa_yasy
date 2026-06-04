@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú</title>
+  <link rel="icon" href="img/yasy.jpeg">
+
+  <link href="menu/styles.css" rel="stylesheet" />
+  
+
+  <link rel="stylesheet" href="bt-icons/bootstrap-icons.min.css">
+
+  <link rel="stylesheet" href="alert/alertify.min.css">
+  <link rel="stylesheet" href="alert/themes/default.min.css">
+  <script src="alert/alertify.min.js"></script>
+
+  <!-- <style>
+    .hidden{
+      display: none;
+    }
+  </style> -->
+
+</head>
+<body class="sb-nav-fixed">
+  <nav class="sb-topnav navbar navbar-expand navbar-dark bg-primary">
+    <!-- Navbar Brand-->
+    <a class="navbar-brand ps-3" href="">Yasy S.A.</a>
+    <!-- Sidebar Toggle-->
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="bi bi-list"></i></button>
+    <!-- Navbar Search-->
+    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+      <!-- <div class="input-group">
+        <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+        <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="bi bi-search"></i></button>
+      </div> -->
+    </form>
+    <!-- Navbar del Usuario-->
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill"></i></a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="#!">Config.</a></li>
+          <li><a class="dropdown-item" href="#" onclick="edit_idusuario()" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">Editar Usuario</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" href="#" onclick="cerrarSesion()">Cerrar sesión</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+      <nav class="sb-sidenav accordion sb-sidenav-ligth text-dark text fw-bold " id="sidenavAccordion">
+        <div class="sb-sidenav-menu bg-warning">
+          <div class="nav">
+            <div class="sb-sidenav-menu-heading">MENU PRINCIPAL</div>
+            <a class="nav-link" href="menu.html">
+              <div class="sb-nav-link-icon"><i class="bi bi-clock"></i></div>
+              <span id="datetime"></span>
+            </a>
+            <div class="sb-sidenav-menu-heading">MODULOS</div>
+            <!-------------------------------------------------------------->
+            <a class="nav-link collapsed text-dark" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+              <div class="sb-nav-link-icon"><i class="bi bi-columns-gap"></i></div>
+              Mantenimiento
+              <div class="sb-sidenav-collapse-arrow"><i class="i bi-chevron-down"></i></div>
+              
+            </a>
+            <!-------------------------------------------------------------->
+            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+              <nav class="sb-sidenav-menu-nested nav">
+                <a class="nav-link d-none" href="usuarios.html" id="Usuarios">Usuarios</a>
+                <a class="nav-link d-none" href="bancos.html" id="Bancos">Bancos</a>
+                <a class="nav-link d-none" href="clientes.html" id="Clientes">Clientes</a>
+                <a class="nav-link d-none" href="proveedores.html" id="Proveedores">Proveedores</a>
+                <a class="nav-link d-none" href="articulos.html" id="Articulos">Articulos</a>
+                <a class="nav-link d-none" href="marcas.html" id="Marcas">Marcas</a>
+                <a class="nav-link d-none" href="clasificaciones.html" id="Familias">Clasificaciones</a>
+              </nav>
+            </div>
+            <!-------------------------------------------------------------->
+            <a class="nav-link collapsed text-dark" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+              <div class="sb-nav-link-icon"><i class="bi bi-book"></i></div>
+              Movimiento
+              <div class="sb-sidenav-collapse-arrow"><i class="i bi-chevron-down"></i></div>
+            </a>
+            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+              <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                <!-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                  Authentication
+                  <div class="sb-sidenav-collapse-arrow"><i class="i bi-chevron-down"></i></div>
+                </a>
+                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                  <nav class="sb-sidenav-menu-nested nav">
+                    <a class="nav-link" href="">Login</a>
+                    <a class="nav-link" href="">Register</a>
+                    <a class="nav-link" href="">Forgot Password</a>
+                  </nav>
+                </div> -->
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                  Facturación
+                  <div class="sb-sidenav-collapse-arrow"><i class=""></i></div>
+                </a>
+                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                  <nav class="sb-sidenav-menu-nested nav">
+                    <a class="nav-link d-none" href="AjusteStock.html" id="Ajuste">Ajuste de Stock</a>
+                    <a class="nav-link d-none" href="compras.html" id="Compras">Compras</a>
+                    <a class="nav-link d-none" href="ventas.html" id="Ventas">Ventas</a>
+                    <a class="nav-link d-none" href="pagoP.html" id="Pproveedores">Pagos a proveedores</a>
+                    <a class="nav-link" href="registroCobros.html" id="Gcobros">Gestion de Cobros</a>
+                  </nav>
+                </div>
+              </nav>
+
+            </div>
+            <!-- <div class="sb-sidenav-menu-heading">Addons</div> -->
+            <a class="nav-link" href="">
+              <div class="sb-nav-link-icon"><i class=""></i></div>
+              <!-- Charts -->
+            </a>
+            <a class="nav-link" href="">
+              <div class="sb-nav-link-icon"><i class=""></i></div>
+              <!-- Tables -->
+            </a>
+
+          </div>
+        </div>
+        <div class="sb-sidenav-footer bg-dark text-white">
+          <div class="small">Iniciado por:</div>
+          <div id="usuario"></div>
+        </div>
+      </nav>
+    </div>
+
+    <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h1 class="mt-4">Casa Yasy S.A.</h1>
+          <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active"></li>
+          </ol>
+          <!-- AQUÍ VA TODO LO QUE SE VA A VISUALIZAR EN LA PÁGINA -->
+          <div class="row">
+            <!-- <button class="btn-editar" data-id="1">Editar</button>
+            <button class="btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">Editar Usuario</button> -->
+            <!-- <button class="btn btn-primary" onclick="edit_idusuario()" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario">
+              Editar Usuario
+            </button> -->
+          </div>
+        </div>
+      </main>
+      <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid px-4">
+          <div class="d-flex align-items-center justify-content-between small">
+            <div class="text-muted">Copyright &copy; Your Website 2025</div>
+            <div>
+              <a href="#">Privacy Policy</a>
+              &middot;
+              <a href="#">Terms &amp; Conditions</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  
+     <!-- Modal Editar Usuario -->
+     <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-labelledby="modalEditarUsuarioLabel" aria-hidden="true" data-bs-backdrop="static">
+      <div class="modal-dialog">
+           <form id="formEditarUsuario" class="modal-content">
+                <div class="modal-header">
+                     <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar Usuario</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                     <input type="hidden" id="edit_idusuario">
+                     <div class="mb-2">
+                          <label class="form-label">N° Cédula</label>
+                          <input type="number" id="edit_cedula" readonly class="form-control" required min="1000000" max="9999999">
+                     </div>
+                     <div class="mb-2">
+                          <label class="form-label">Nombre completo</label>
+                          <input type="text" id="edit_nombre" readonly class="form-control text-uppercase" required minlength="6" maxlength="50">
+                     </div>
+                     <div class="mb-2">
+                          <label class="form-label">Celular</label>
+                          <input type="text" id="edit_celular" readonly class="form-control" required minlength="6" maxlength="12">
+                     </div>
+                     <div class="mb-2">
+                          <label class="form-label">Usuario</label>
+                          <input type="text" id="edit_usuario" class="form-control" required minlength="5" maxlength="30">
+                     </div>
+                     <div class="mb-2">
+                          <label class="form-label">Contraseña</label>
+                          <input type="password" id="edit_contrasena" class="form-control" required minlength="5" maxlength="30">
+                     </div>
+                     <div class="mb-2">
+                          <label class="form-label">Confirmar</label>
+                          <input type="password" id="edit_c-contrasena" class="form-control" required minlength="5" maxlength="30">
+                     </div>
+                </div>
+                <div class="modal-footer">
+                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+           </form>
+      </div>
+ </div>
+
+
+
+
+
+  <!-- Importar el archivo JavaScript -->
+  <script src="js/menu.js"></script>
+  <script src="js/bdP.js"></script>
+  <script src="js/sistemFunctions.js"></script>
+  <script src="menu/bootstrap.bundle.min.js"></script>
+  <script src="menu/scripts.js"></script>
+
+  <script>
+    if(!sessionStorage.getItem("sesionActiva")){
+      localStorage.removeItem("nomUsuario");
+      localStorage.removeItem("rolUsuario");
+      window.location.href = "Pagerror.html";
+    }
+    
+    var nom = localStorage.getItem("nomUsuario");
+    if (nom == "" || nom == null){
+      window.location.href = "Pagerror.html"; // Redirige al login
+    }else{
+      document.getElementById("usuario").innerHTML = nom;
+    }
+
+    
+  </script>
+
+  <script>
+    // obtiene el array de objetos desde el localstorage
+    var usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+    // se guarda en una variable el rol de usuario que se encuentra en el localstorage
+    var cargo = localStorage.getItem("rolUsuario");
+
+    //Si el cargo es Admin, entonces remueve la clase hidden(oculto) y muestra todo
+    if(cargo==="Administrador"){
+      document.getElementById("Usuarios").classList.remove('d-none');
+      document.getElementById("Proveedores").classList.remove('d-none');
+      document.getElementById("Compras").classList.remove('d-none');
+      document.getElementById("Bancos").classList.remove('d-none');
+      document.getElementById("Pproveedores").classList.remove('d-none');
+      document.getElementById("Ventas").classList.remove('d-none');
+      document.getElementById("Clientes").classList.remove('d-none');
+      document.getElementById("Marcas").classList.remove('d-none');
+      document.getElementById("Familias").classList.remove('d-none');
+      document.getElementById("Articulos").classList.remove('d-none');
+      document.getElementById("Ajuste").classList.remove('d-none');
+    }
+    if(cargo==="Codificador"){
+      document.getElementById("Proveedores").classList.remove('d-none');
+      document.getElementById("Compras").classList.remove('d-none');
+      document.getElementById("Marcas").classList.remove('d-none');
+      document.getElementById("Familias").classList.remove('d-none');
+      document.getElementById("Articulos").classList.remove('d-none');
+    }
+    if(cargo==="Cajero"){
+      document.getElementById("Clientes").classList.remove('d-none');
+      document.getElementById("Ventas").classList.remove('d-none');
+    }
+  </script>
+
+  <script>
+    // Función para cargar los datos del usuario que inició sesión en el modal
+    function edit_idusuario() {
+        // Recuperar el array de usuarios desde localStorage
+        const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+        // Recuperar el nombre del usuario que inició sesión
+        const nomUsuario = localStorage.getItem('nomUsuario'); // este valor debe coincidir con el campo "nombre"
+
+        console.log('Usuarios en localStorage:', usuarios);
+        console.log('Nombre del usuario que inició sesión:', nomUsuario);
+
+        // Buscar al usuario que coincide con el nombre
+        const usuarioActual = usuarios.find(u => u.nombre === nomUsuario);
+
+        if (usuarioActual) {
+            // Cargar los datos del usuario en el modal
+            document.getElementById('edit_idusuario').value = usuarioActual.idusuario;
+            document.getElementById('edit_cedula').value = usuarioActual.cedula;
+            document.getElementById('edit_nombre').value = usuarioActual.nombre;
+            document.getElementById('edit_celular').value = usuarioActual.celular;
+            document.getElementById('edit_usuario').value = usuarioActual.usuario;
+            document.getElementById('edit_contrasena').value = usuarioActual.contrasena;
+        } else {
+            alertify.error('Usuario no encontrado.');
+            console.error('Usuario que inició sesión no encontrado en el array de usuarios.');
+        }
+    }
+
+    // Función para guardar los cambios realizados en el modal
+    document.getElementById('formEditarUsuario').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Recuperar el array de usuarios desde localStorage
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+      // Obtener el ID del usuario desde el campo oculto
+      const idUsuario = parseInt(document.getElementById('edit_idusuario').value);
+
+      // Buscar el índice del usuario en el array
+      const index = usuarios.findIndex(u => u.idusuario === idUsuario);
+
+      if (index !== -1) {
+        // Actualizar los datos del usuario
+        usuarios[index].usuario = document.getElementById('edit_usuario').value.trim();
+        usuarios[index].contrasena = document.getElementById('edit_contrasena').value.trim();
+
+        // Guardar los cambios en localStorage
+        // Validar que no exista otro usuario con el mismo nombre de usuario
+          const nuevoUsuarioNombre = document.getElementById('edit_usuario').value.trim();
+          const existeUsuario = usuarios.some((u, i) =>
+            u.usuario === nuevoUsuarioNombre && i !== index
+          );
+          if (existeUsuario) {
+            alertify.error('Ya existe un usuario con ese nombre');
+            return;
+          }
+          //validar contraseña 2 mayusculas, 2 minusculas, 2 numeros
+          const contrasena = document.getElementById('edit_contrasena').value.trim();
+          const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+          if (!regex.test(contrasena)) {
+            alertify.error("La contraseña debe tener al menos 8 caracteres, incluyendo 2 mayúsculas, 2 minúsculas y 2 números");
+            return;
+          }
+          
+        //validar confirmar contraselña
+          if(usuarios[index].contrasena !== document.getElementById('edit_c-contrasena').value.trim()) {
+            alertify.error("Las contraseñas no coinciden");
+            return;
+          }else{       
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            localStorage.setItem('nomUsuario', usuarios[index].nombre); // Actualizar el nombre completo en localStorage
+          }
+        // Actualizar el nombre de usuario en la interfaz
+        document.getElementById('usuario').innerHTML = usuarios[index].nombre;
+
+        // Cerrar el modal
+        const modalEditarUsuario = bootstrap.Modal.getInstance(document.getElementById('modalEditarUsuario'));
+        modalEditarUsuario.hide();
+
+        // Mostrar mensaje de éxito
+        alertify.success('Usuario actualizado correctamente.');
+      } else {
+        alertify.error('No se pudo actualizar el usuario.');
+        console.error('Usuario no encontrado en el array de usuarios.');
+      }
+    });
+//actualizar hora
+    function updateDateTime() {
+      const now = new Date(); 
+      const formatted = now.toLocaleString(); // Muestra fecha y hora locales
+      document.getElementById("datetime").textContent = formatted;
+    }
+  
+    // Actualizar al cargar
+    updateDateTime();
+  
+    // Actualizar cada segundo
+    setInterval(updateDateTime, 1000);
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Informe de Órdenes de Pago con Filtro por RUC</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" type="text/css" href="css/stylo.css">
+  <link rel="stylesheet" href="bt/bootstrap.min.css">
+  <script src="bt/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="bt-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="alertify/alertify.min.css">
+  <link rel="stylesheet" href="alertify/themes/default.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+  <script src="alertify/alertify.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #f8f9fa;
+      color: #343a40;
+    }
+    h1, h2, h3 {
+      font-family: 'Roboto Slab', serif;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .header {
+      border-bottom: 3px solid #007bff;
+      padding-bottom: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .table thead th {
+      background-color: #007bff;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #e9ecef;
+    }
+    .totales {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #007bff;
+    }
+    .detalle-facturas {
+      background-color: #f1f3f5;
+      font-size: 0.9rem;
+    }
+    .fecha-label {
+      font-weight: 600;
+    }
+    .btn-primary {
+      background-color: #0056b3;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #003d80;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #dee2e6;
+      font-size: 0.9rem;
+      color: #6c757d;
+      text-align: center;
+    }
+    /* Modal */
+    .modal-content {
+      font-family: 'Open Sans', sans-serif;
+      color: #343a40;
+    }
+    .modal-header {
+      background-color: #007bff;
+      color: white;
+    }
+    .modal-footer .btn-close {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      line-height: 1;
+      opacity: 0.7;
+    }
+    .modal-footer .btn-close:hover {
+      opacity: 1;
+    }
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+    }
+  </style>
+</head>
+<body class="container py-4">
+
+  <header class="header text-center">
+    <img src="img/yasy.jpeg" alt="Logo de la Empresa" style="max-height: 80px; margin-bottom: 1rem;">
+    <h1>Informe de Órdenes de Pago</h1>
+    <p class="lead">Filtrado por Fecha y RUC, detalle por proveedor</p>
+  </header>
+
+  <section class="mb-4 row g-3 align-items-end justify-content-center">
+    <div>
+      <a href="pagoP.html" style="color:black;text-decoration:none;font-weight:bold;">
+        &#8592; Volver 
+      </a>
+    </div>
+    <div class="col-md-3">
+      <label for="fechaDesde" class="form-label fecha-label">Fecha Desde:</label>
+      <input type="date" id="fechaDesde" class="form-control" />
+    </div>
+    <div class="col-md-3">
+      <label for="fechaHasta" class="form-label fecha-label">Fecha Hasta:</label>
+      <input type="date" id="fechaHasta" class="form-control" />
+    </div>
+    <div class="col-md-3">
+      <label for="rucFiltro" class="form-label fecha-label">Filtrar por RUC:</label>
+      <input type="text" id="rucFiltro" class="form-control" placeholder="Ej: 1234567-8" />
+    </div>
+    <div class="col-md-3 d-grid">
+      <button class="btn btn-primary" id="btnGenerar">Generar Informe</button>
+    </div>
+  </section>
+
+  <section id="informeSection" style="display:none;">
+    <h2>Resumen de Órdenes</h2>
+
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Proveedor</th>
+          <th>RUC</th>
+          <th> Fecha de Pago</th>
+          <th>Cant. Órdenes</th>
+          <th>Total Pagado (Gs.)</th>
+        </tr>
+      </thead>
+      <tbody id="resumenBody"></tbody>
+      <tfoot>
+        <tr class="totales">
+          <td colspan="3" class="text-end">Totales generales:</td>
+          <td align="center" id="totalOrdenes"></td>
+          <td id="totalPagado" class="text-end"></td>
+        </tr>
+      </tfoot>
+      
+    </table>
+    
+  </section>
+    <div class="text-end mt-3">
+            <button class="btn btn-success mb-3 no-print" id="btnImprimirGeneral">Imprimir Informe General</button>
+    </div>
+  <!-- Modal para detalle -->
+  <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detalleModalLabel">Detalle de Ordenes</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body" id="modalDetalleBody" style="background-color:#f8f9fa;"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="btnImprimirDetalle">Imprimir Detalle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <small>Informe generado - &copy; 2025</small>
+  </footer>
+
+  <!-- Bootstrap JS y dependencias (Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/sistemFunctions.js"></script>
+
+  <script>
+
+    if (!sessionStorage.getItem("sesionActiva")) {
+      localStorage.removeItem("nomUsuario");
+      localStorage.removeItem("rolUsuario");
+      window.location.href = "Pagerror.html";
+    }
+    const btnGenerar = document.getElementById("btnGenerar");
+    const informeSection = document.getElementById("informeSection");
+    const resumenBody = document.getElementById("resumenBody");
+    const totalOrdenesEl = document.getElementById("totalOrdenes");
+    const totalPagadoEl = document.getElementById("totalPagado");
+    const modalDetalle = new bootstrap.Modal(document.getElementById('detalleModal'));
+    const modalDetalleBody = document.getElementById("modalDetalleBody");
+    const btnImprimirDetalle = document.getElementById("btnImprimirDetalle");
+
+    let ordenesFiltradas = [];
+    let compras = [];
+
+    function parseFecha(fechaStr) {
+      if (!fechaStr) return null;
+      // Si es formato yyyy-mm-dd
+      if (/^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
+        return new Date(fechaStr);
+      }
+      // Si es formato dd/mm/yyyy
+      const partes = fechaStr.split(",")[0].trim().split("/");
+      if (partes.length === 3) {
+        return new Date(`${partes[2]}-${partes[1].padStart(2,"0")}-${partes[0].padStart(2,"0")}`);
+      }
+      return null;
+    }
+
+
+
+    function formatearFecha(dateObj) {
+      if (!dateObj) return "";
+      return dateObj.toLocaleDateString("es-PY", { year: "numeric", month: "long", day: "numeric" });
+    }
+
+    // Limpiar string ruc para comparacion
+    function limpiarRuc(ruc) {
+      return ruc.replace(/[\s.-]/g, "").toLowerCase();
+    }
+
+    btnGenerar.onclick = () => {
+      const ordenes = JSON.parse(localStorage.getItem("ordenesPago") || "[]");
+      compras = JSON.parse(localStorage.getItem("compras") || "[]");
+
+      const desde = document.getElementById("fechaDesde").value;
+      const hasta = document.getElementById("fechaHasta").value;
+      const rucFiltro = limpiarRuc(document.getElementById("rucFiltro").value);
+
+      const desdeDate = desde ? new Date(desde) : null;
+      const hastaDate = hasta ? new Date(hasta) : null;
+
+      // Filtrar y agrupar por proveedor-ruc-fechaPago
+      const resumenMap = new Map();
+
+      ordenesFiltradas = ordenes.filter(orden => {
+        const fechaPago = parseFecha(orden.fecha);
+        if (!fechaPago) return false;
+
+        if ((desdeDate && fechaPago < desdeDate) || (hastaDate && fechaPago > hastaDate)) return false;
+        if (rucFiltro && limpiarRuc(orden.ruc).indexOf(rucFiltro) === -1) return false;
+
+        return true;
+      });
+
+      // Re-agrupar para resumen
+      resumenMap.clear();
+
+      ordenesFiltradas.forEach(orden => {
+        const key = `${orden.proveedor}_${orden.ruc}_${orden.fecha}`;
+        const fechaPago = parseFecha(orden.fecha);
+        if (!resumenMap.has(key)) {
+          resumenMap.set(key, {
+            proveedor: orden.proveedor,
+            ruc: orden.ruc,
+            fecha: orden.fecha,
+            fechaObj: fechaPago,
+            cantidad: 0,
+            total: 0,
+            ordenes: []
+          });
+        }
+        const grupo = resumenMap.get(key);
+        grupo.cantidad++;
+        grupo.ordenes.push(orden);
+
+        if (Array.isArray(orden.facturas)) {
+          orden.facturas.forEach(idFactura => {
+            const compra = compras.find(c => String(c.idcompra) === String(idFactura));
+    
+            if (compra) {
+              const monto = parseInt(compra.totcompra ?? compra.total ?? 0);
+              grupo.total += monto;
+            }
+          });
+        }
+      });
+
+      if (resumenMap.size === 0) {
+        resumenBody.innerHTML = `<tr><td colspan="5" class="text-center">No se encontraron órdenes en el filtro seleccionado.</td></tr>`;
+        informeSection.style.display = "block";
+        totalOrdenesEl.textContent = "0";
+        totalPagadoEl.textContent = "0";
+        return;
+      }
+
+      resumenBody.innerHTML = "";
+      let totalOrdenes = 0;
+      let totalPagos = 0;
+
+      // Ordenar para mostrar
+      const entradasOrdenadas = Array.from(resumenMap.values())
+        .sort((a,b) => a.fechaObj - b.fechaObj);
+
+      entradasOrdenadas.forEach(grupo => {
+        totalOrdenes += grupo.cantidad;
+        totalPagos += grupo.total;
+
+        const tr = document.createElement("tr");
+        tr.classList.add("cursor-pointer");
+        tr.style = "cursor:pointer;";
+        tr.title = "Click para ver detalle";
+        tr.innerHTML = `
+          <td>${grupo.proveedor}</td>
+          <td>${grupo.ruc}</td>
+          <td>${grupo.fecha}</td>
+          <td class="text-center">${grupo.cantidad}</td>
+          <td class="text-end">${grupo.total.toLocaleString()} Gs.</td>
+        `;
+
+        // Evento para mostrar detalle modal
+        tr.onclick = () => {
+          mostrarDetalleModal(grupo);
+        };
+
+        resumenBody.appendChild(tr);
+      });
+
+      totalOrdenesEl.textContent = totalOrdenes;
+      totalPagadoEl.textContent = totalPagos.toLocaleString() + " Gs.";
+
+      informeSection.style.display = "block";
+      window.scrollTo({top: 0, behavior: "smooth"});
+    };
+
+
+    function parseFechaDMY(fechaStr) {
+      if (!fechaStr) return null;
+      // dd-mm-yyyy
+      if (/^\d{2}-\d{2}-\d{4}$/.test(fechaStr)) {
+        const [d, m, y] = fechaStr.split("-");
+        const date = new Date();
+        date.setFullYear(Number(y), Number(m) - 1, Number(d));
+        date.setHours(0, 0, 0, 0);
+        return date;
+      }
+      // dd/mm/yyyy
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(fechaStr)) {
+        const [d, m, y] = fechaStr.split("/");
+        const date = new Date();
+        date.setFullYear(Number(y), Number(m) - 1, Number(d));
+        date.setHours(0, 0, 0, 0);
+        return date;
+      }
+      // yyyy-mm-dd
+      if (/^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
+        const [y, m, d] = fechaStr.split("-");
+        const date = new Date();
+        date.setFullYear(Number(y), Number(m) - 1, Number(d));
+        date.setHours(0, 0, 0, 0);
+        return date;
+      }
+      return null;
+    }
+
+
+    function mostrarDetalleModal(grupo) {
+      modalDetalleBody.innerHTML = ""; // limpiar
+
+      const titulo = document.getElementById("detalleModalLabel");
+      titulo.textContent = `Detalle de Órdenes`;
+
+      if (grupo.ordenes.length === 0) {
+        modalDetalleBody.innerHTML = "<p>No hay órdenes para mostrar.</p>";
+      } else {
+        grupo.ordenes.forEach(orden => {
+          const divOrden = document.createElement("div");
+          divOrden.classList.add("mb-4", "p-3", "border", "rounded", "bg-white", "shadow-sm");
+
+          const fechaPagoFmt = formatearFecha(parseFecha(orden.fecha));
+          divOrden.innerHTML = `
+            <h5 class="mb-3 text-primary fw-bold border-bottom pb-2"> Orden de Pago</h5>
+            <p><strong>Proveedor:</strong> ${grupo.proveedor}</p>
+            <p><strong>RUC:</strong> ${grupo.ruc}</p>
+            <p><strong>Fecha de Pago al Proveedor:</strong> ${orden.fecha}</p>
+            <p><strong>Cantidad de Facturas:</strong> ${orden.facturas ? orden.facturas.length : 0}</p>
+          `;
+
+          // Tabla detalle facturas
+          const tablaFacturas = document.createElement("table");
+          tablaFacturas.className = "table table-sm table-bordered detalle-facturas";
+
+          const thead = document.createElement("thead");
+          thead.innerHTML = `
+            <tr>
+              <th>N° de Factura</th>
+              <th>Fecha de Compra</th>
+              <th>Monto (Gs.)</th>
+            </tr>
+          `;
+          tablaFacturas.appendChild(thead);
+
+          const tbody = document.createElement("tbody");
+
+          if (orden.facturas && orden.facturas.length > 0) {
+            orden.facturas.forEach(idFactura => {
+            const compra = compras.find(c => String(c.idcompra) === String(idFactura));
+            if (compra) {
+                const numeroFactura = compra.numfactura || compra.factura || compra.nrofactura || "-";
+                const fechaCompraRaw = compra.FechaCompra || compra.fecha || compra.fechafactura || compra.fechaCompra || null;
+                const fechaCompra = fechaCompraRaw ? parseFechaDMY(fechaCompraRaw) : null;
+                const fechaCompraFormateada = fechaCompra ? fechaCompra.toLocaleDateString("es-PY") : "-";
+                const monto = parseInt(compra.totcompra ?? compra.total ?? compra.monto ?? 0);
+
+                const trFactura = document.createElement("tr");
+                trFactura.innerHTML = `
+                <td>${numeroFactura}</td>
+                <td>${fechaCompraFormateada}</td>
+                <td class="text-end">${monto.toLocaleString()} Gs.</td>
+                `;
+                tbody.appendChild(trFactura);
+            } else {
+                // En caso de que no se encuentre la compra
+                const trFactura = document.createElement("tr");
+                trFactura.innerHTML = `
+                <td>${idFactura}</td>
+                <td>-</td>
+                <td class="text-end">-</td>
+                `;
+                tbody.appendChild(trFactura);
+            }
+            });
+
+
+          } else {
+            const trVacio = document.createElement("tr");
+            trVacio.innerHTML = `<td colspan="3" class="text-center text-muted">No hay facturas registradas</td>`;
+            tbody.appendChild(trVacio);
+          }
+
+          tablaFacturas.appendChild(tbody);
+          divOrden.appendChild(tablaFacturas);
+          // Calcular total de facturas
+            let totalOrden = 0;
+            if (orden.facturas && orden.facturas.length > 0) {
+            orden.facturas.forEach(idFactura => {
+                const compra = compras.find(c => String(c.idcompra) === String(idFactura));
+                if (compra) {
+                const monto = parseInt(compra.totcompra ?? compra.total ?? compra.monto ?? 0);
+                totalOrden += monto;
+                }
+            });
+            }
+
+            // Mostrar Total General
+            const totalDiv = document.createElement("div");
+            totalDiv.className = "mt-3 text-end fw-bold";
+            totalDiv.innerHTML = `Total General: ${totalOrden.toLocaleString()} Gs.`;
+            divOrden.appendChild(totalDiv);
+          modalDetalleBody.appendChild(divOrden);
+        });
+      }
+
+      modalDetalle.show();
+    }
+
+    // Función para imprimir solo el contenido del modal
+    btnImprimirDetalle.onclick = () => {
+    const contenido = modalDetalleBody.innerHTML;
+    const titulo = document.getElementById("detalleModalLabel").textContent;
+
+    const ventanaImpresion = window.open('', '', 'width=900,height=700');
+
+    ventanaImpresion.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8" />
+            <title>Orden de Pago</title>
+
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <style>
+                body {
+                    font-family: 'Open Sans', sans-serif;
+                    padding: 40px;
+                    color: #000;
+                }
+                h1, h2 {
+                    text-align: center;
+                    margin-bottom: 1rem;
+                }
+                .info-empresa {
+                    text-align: center;
+                    margin-bottom: 2rem;
+                }
+                .info-proveedor {
+                    margin-bottom: 2rem;
+                }
+                .detalle-box {
+                    margin-bottom: 2rem;
+                }
+                table {
+                    width: 100%;
+                }
+                .total-final {
+                    font-weight: bold;
+                    text-align: right;
+                    margin-top: 1rem;
+                }
+                .pie {
+                    text-align: center;
+                    font-size: 0.9rem;
+                    color: #666;
+                    margin-top: 4rem;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="info-empresa">
+              <img src="img/yasy.jpeg" alt="Logo" style="max-height: 100px; margin-bottom: 1rem;">
+                <h2>Casa Yasy S.A.</h2>
+                <p>RUC: 80020495-6 | Tel: 0331 - 240003</p>
+                <p>Dir: MAYOR LORENZO MEDINA 228</p>
+                <h4 class="mt-4">ORDEN DE PAGO</h4>
+            </div>
+
+            ${contenido}
+
+            <div class="pie">
+                <p>Ticket de Uso Interno</p>
+                <p>No Válido Como Comprobante Fiscal</p>
+                <p>Paraguay - Concepción</p>
+            </div>
+        </body>
+        </html>
+    `);
+    
+    ventanaImpresion.document.close();
+
+    ventanaImpresion.onload = () => {
+        ventanaImpresion.focus();
+        ventanaImpresion.print();
+        ventanaImpresion.onafterprint = () => ventanaImpresion.close();
+    };
+};
+// funcion para imprimir todo 
+btnImprimirGeneral.onclick = () => {
+    const contenido = document.getElementById("informeSection").innerHTML;
+
+    const ventanaImpresion = window.open('', '', 'width=1000,height=800');
+    ventanaImpresion.document.write(`
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8" />
+            <title>Informe General de Órdenes de Pago</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <style>
+                body {
+                    font-family: 'Open Sans', sans-serif;
+                    padding: 40px;
+                    color: #000;
+                }
+                h1, h2 {
+                    text-align: center;
+                    margin-bottom: 1rem;
+                }
+                .info-empresa {
+                    text-align: center;
+                    margin-bottom: 2rem;
+                }
+                .detalle-box {
+                    margin-bottom: 2rem;
+                }
+                table {
+                    width: 100%;
+                }
+                .totales {
+                    font-weight: bold;
+                    color: #007bff;
+                }
+                .pie {
+                    text-align: center;
+                    font-size: 0.9rem;
+                    color: #666;
+                    margin-top: 4rem;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="info-empresa">
+              <img src="img/yasy.jpeg" alt="Logo" style="max-height: 100px; margin-bottom: 1rem;">
+                <h2>Casa Yasy S.A.</h2>
+                <p>RUC: 80020495-6 | Tel: 0331 - 240003</p>
+                <p>Dir: MAYOR LORENZO MEDINA 228</p>
+                <h4 class="mt-4">ORDEN DE PAGO</h4>
+            </div>
+
+            ${contenido}
+
+            <div class="pie">
+                <p>Ticket de Uso Interno</p>
+                <p>No Válido Como Comprobante Fiscal</p>
+                <p>Paraguay - Concepción</p>
+            </div>
+        </body>
+        </html>
+    `);
+
+    ventanaImpresion.document.close();
+
+    ventanaImpresion.onload = () => {
+        ventanaImpresion.focus();
+        ventanaImpresion.print();
+        ventanaImpresion.onafterprint = () => ventanaImpresion.close();
+    };
+};
+
+  </script>
+</body>
+</html>

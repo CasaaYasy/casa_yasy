@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compras</title>
+  <link rel="icon" href="img/yasy.jpeg">
+
+  <link rel="stylesheet" href="bt-icons/bootstrap-icons.min.css">
+  <link href="menu/styles.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="alert/alertify.min.css">
+  <link rel="stylesheet" href="alert/themes/default.min.css">
+  <script src="alert/alertify.min.js"></script>
+
+
+</head>
+
+<body class="sb-nav-fixed">
+  <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <!-- Navbar Brand-->
+    <a class="navbar-brand ps-3" href="menu.html">Casa Yasy</a>
+    <!-- Sidebar Toggle-->
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="bi bi-list"></i></button>
+    <!-- Navbar Search-->
+    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+      <div class="input-group">
+        <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+        <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="bi bi-search"></i></button>
+      </div>
+    </form>
+    <!-- Navbar del Usuario-->
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill"></i></a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="#!">Config.</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" href="#" onclick="cerrarSesion()">Cerrar sesión</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+      <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+          <div class="nav">
+            <div class="sb-sidenav-menu-heading">Core</div>
+            <a class="nav-link" href="menu.html">
+              <div class="sb-nav-link-icon"><i class="bi bi-speedometer"></i></div>
+              Dashboard
+            </a>
+            <div class="sb-sidenav-menu-heading">Interface</div>
+            <!-------------------------------------------------------------->
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+              <div class="sb-nav-link-icon"><i class="bi bi-columns-gap"></i></div>
+              Mantenimiento
+              <div class="sb-sidenav-collapse-arrow"><i class="i bi-chevron-down"></i></div>
+            </a>
+            <!-------------------------------------------------------------->
+            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+              <nav class="sb-sidenav-menu-nested nav">
+                <a class="nav-link d-none" href="usuarios.html" id="Usuarios">Usuarios</a>
+                <a class="nav-link d-none" href="bancos.html" id="Bancos">Bancos</a>
+                <a class="nav-link d-none" href="clientes.html" id="Clientes">Clientes</a>
+                <a class="nav-link d-none" href="proveedores.html" id="Proveedores">Proveedores</a>
+                <a class="nav-link d-none" href="#" id="Articulos">Articulos</a>
+                <a class="nav-link d-none" href="#" id="Marcas">Marcas</a>
+                <a class="nav-link d-none" href="#" id="Familias">Familias</a>
+              </nav>
+            </div>
+            <!-------------------------------------------------------------->
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+              <div class="sb-nav-link-icon"><i class="bi bi-book"></i></div>
+                Movimiento
+              <div class="sb-sidenav-collapse-arrow"><i class="i bi-chevron-down"></i></div>
+            </a>
+            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+              <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                  Facturación
+                  <div class="sb-sidenav-collapse-arrow"><i class="i bi-chevron-down"></i></div>
+                </a>
+                <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                  <nav class="sb-sidenav-menu-nested nav">
+                    <a class="nav-link d-none" href="compras.html" id="Compras">Compras</a>
+                    <a class="nav-link d-none" href="ventas.html" id="Ventas">Ventas</a>
+                    <a class="nav-link d-none" href="pagoProveedores.html" id="Pproveedores">Pagos a proveedores</a>
+                  </nav>
+                </div>
+              </nav>
+
+            </div>
+            <div class="sb-sidenav-menu-heading">Addons</div>
+            <a class="nav-link" href="">
+              <div class="sb-nav-link-icon"><i class="bi bi-bar-chart"></i></div>
+              Charts
+            </a>
+            <a class="nav-link" href="">
+              <div class="sb-nav-link-icon"><i class="bi bi-table"></i></div>
+              Tables
+            </a>
+
+          </div>
+        </div>
+        <div class="sb-sidenav-footer">
+          <div class="small">Iniciado por:</div>
+          <div id="usuario"></div>
+        </div>
+      </nav>
+    </div>
+
+    <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h1 class="mt-2">Compras</h1>
+          <!-- AQUÍ VA TODO LO QUE SE VA A VISUALIZAR EN LA PÁGINA -->
+          <form id="formCompras" class="modal-content">
+            <div class="row">
+              <!-- FILA 1 -->
+              <div class="col-sm-2">
+                <label class="form-label fw-bold">R.U.C.</label>
+                <input type="text" id="ruc" class="form-control" data-bs-target="#modalBuscarProv" data-bs-toggle="modal" required>
+              </div>
+              <div class="col-sm-4">
+                  <label class="form-label fw-bold">PROVEEDOR</label>
+                  <input type="text" id="proveedor" class="form-control text-uppercase" required readonly>
+              </div>
+              <div class="col-sm-2">
+                <label class="form-label fw-bold">CONDICIÓN</label>
+                <select id="condicion" class="form-select">
+                  <option value="CONTADO">CONTADO</option>
+                  <option value="CRÉDITO">CRÉDITO</option>
+                </select>
+              </div>
+              <div class="col-sm-2">
+                <label class="form-label fw-bold">FECHA</label>
+                <input type="date" id="fecha" class="form-control" required>
+              </div>
+              <div class="col-sm-2">
+                <label class="form-label fw-bold">N° FACTURA</label>
+                <input type="text" id="numfactura" class="form-control" required minlength="7" maxlength="15">
+              </div>
+            </div>
+
+            <!-- FILA 2 -->
+            <div class="row">
+              <div class="col-sm-2">
+                <label class="form-label fw-bold">COD. BARRA</label>
+                <input type="text" id="codbarra" class="form-control" required maxlength="13">
+                <input type="hidden" id="idarticulo">
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label fw-bold">DESCRIPCIÓN</label>
+                <input type="text" id="descripcion" class="form-control text-uppercase" readonly>
+                <input type="hidden" id="iva">
+              </div>
+              <div class="col-sm-1">
+                <label class="form-label fw-bold">CANT.</label>
+                <input type="number" id="cantidad" class="form-control" required min="1" max="9999" value="1">
+              </div>
+              <div class="col-sm-2">
+                <label class="form-label fw-bold">PRE. UNI.</label>
+                <input type="text" id="preuni" class="form-control" required>
+              </div>
+              <div class="col-sm-2">
+                <label class="form-label fw-bold">SUBTOTAL</label>
+                <input type="text" id="subtotal" class="form-control" readonly>
+              </div>
+              <div class="col-sm-1 d-grid align-items-end">
+                <button type="button" id="btnAgregarArticulo" class="btn btn-success" title="Agregar artículo"><i class="bi bi-plus-circle"></i></button>
+              </div>
+            </div>
+
+            <!-- FILA 3 -->
+            <div class="row">
+              <table id="tablaArticulos" class="display" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Cod. Barra</th>
+                    <th>Descripción</th>
+                    <th>I.V.A.</th>
+                    <th>Cant.</th>
+                    <th>Pre. Uni.</th>
+                    <th>Subtotal</th>
+                    <th>Acción</th>
+                    <th>Id Articulo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </form>
+          
+        </div>
+      </main>
+      <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid px-4">
+          <div class="d-flex align-items-center justify-content-between small">
+            <div class="text-muted">Copyright &copy; Your Website 2025</div>
+            <div>
+              <a href="#">Política de Privacidad</a>
+              &middot;
+              <a href="#">Terminos &amp; Condiciones</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+
+  <!-- Modal Buscar Proveedor -->
+  <div class="modal fade" id="modalBuscarProv" tabindex="-1" aria-labelledby="modalBuscarProveedor" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <form id="formBuscarProv">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalBuscarProvLabel">Proveedores</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <table id="tablaProv" class="display" style="width:50%">
+            <thead>
+              <tr>
+                <th>R.U.C</th>
+                <th>PROVEEDOR</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <!-- <div class="mb-6"> DEBE SER UNA TABLA, NO UN FORMULARIO
+            <label class="form-label">R.U.C</label>
+            <input type="text" id="buscar_ruc" class="form-control" readonly>
+
+          </div>
+          <div class="mb-6">
+            <label class="form-label">Proveedor</label>
+            <input type="text" id="buscar_prov" class="form-control" readonly>
+          </div> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Aceptar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+   <!-- Modal Editar Compra
+   <div class="modal fade" id="modalEditarCompra" tabindex="-1" aria-labelledby="modalEditarCompraLabel" aria-hidden="true" data-bs-backdrop="static">
+      <div class="modal-dialog">
+        <form id="formEditarCompra" class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalEditarCompraLabel">Editar Usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+
+          <div class="modal-body">
+            <input type="hidden" id="edit_idcompra">
+            <div class="mb-2">
+              <label class="form-label">Fecha de Compra</label>
+              <input type="date" id="edit_fecha" class="form-control" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Producto</label>
+              <input type="text" id="edit_producto" class="form-control text-uppercase" required minlength="6" maxlength="50">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Proveedor</label>
+              <input type="text" id="edit_proveedor" class="form-control" required minlength="6" maxlength="12">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Unidades</label>
+              <input type="number" id="edit_unidades" class="form-control" required min="1" max="9999999">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Precio Unitario</label>
+              <input type="number" id="edit_precio" class="form-control" required min="1" max="9999999">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Monto Total</label>
+              <input type="number" id="edit_monto" class="form-control" required min="1" max="9999999">
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+   </div> -->
+
+
+  <!-- Importar el archivo JavaScript -->
+  <script src="js/menu.js"></script>
+  <script src="js/bdP.js"></script>
+  <script src="js/sistemFunctions.js"></script>
+  <script src="menu/bootstrap.bundle.min.js"></script>
+  <script src="menu/scripts.js"></script>
+  <!-- DATATABLES -->
+  <script src="dt/jquery-3.7.1.js"></script>
+  <script src="dt/datatables.min.js"></script>
+  <script src="dt/jquery.dataTables.min.js"></script>
+  <!-- DATATABLES Buttons extension -->
+  <script src="dt/dataTables.buttons.min.js"></script>
+  <script src="dt/buttons.print.min.js"></script>
+  <script src="dt/buttons.html5.min.js"></script>
+  <!-- DATATABLES JSZip y pdfmake para exportar -->
+  <script src="dt/jszip.min.js"></script>
+  <script src="dt/pdfmake.min.js"></script>
+  <script src="dt/vfs_fonts.js"></script>
+  <!-- DATATABLES Idioma Español -->
+  <script src="dt/es-ES.js"></script>
+
+  <script>
+    if(!sessionStorage.getItem("sesionActiva")){
+      localStorage.removeItem("nomUsuario");
+      localStorage.removeItem("rolUsuario");
+      window.location.href = "Pagerror.html";
+    }
+
+    var nom = localStorage.getItem("nomUsuario");
+    if (nom == "" || nom == null){
+      window.location.href = "Pagerror.html"; // Redirige al login
+    }else{
+      document.getElementById("usuario").innerHTML = nom;
+    }
+
+
+    // Obtener la fecha actual en formato YYYY-MM-DD
+    const hoy = new Date().toISOString().split("T")[0];
+    // Establecer el valor máximo para la fecha, no permite fecha futura
+    document.getElementById("fecha").max = hoy;
+    // Establecer la fecha actual como valor por defecto
+    document.getElementById("fecha").value = hoy;
+
+    let contadorItem = 1;
+
+    //Al cargar la página configurar la tabla en donde se van a cargar los artículos
+    $(document).ready(function () {
+      $('#tablaArticulos').DataTable({
+        scrollY: '200px',
+        scrollCollapse: true,
+        paging: false,
+        searching: false,
+        info: false,
+        ordering: false,
+        language: spanish,
+        columnDefs: [
+          { targets: 0, width: '5%' },
+          { targets: 1, width: '15%' },
+          { targets: 2, width: '40%' },
+          { targets: 3, width: '10%' },
+          { targets: 4, width: '5%', className: 'text-end' },
+          { targets: 5, width: '10%', className: 'text-end' },
+          { targets: 6, width: '10%', className: 'text-end' },
+          { targets: 7, width: '5%' },
+          { targets: 8, visible: false }
+        ]
+      });
+    });
+
+
+    var proveedores= JSON.parse(localStorage.getItem("proveedores")) || [];
+    var proveedor = proveedores.find(p => p.ruc);
+    var nomproveedor = proveedores.find(p => p.nombre);
+
+    document.addEventListener('click', function (e){
+      
+
+      if(e.target.closest('ruc')){
+        document.getElementById("buscar_ruc").value= proveedor;
+        document.getElementById("buscar_prov").value= nomproveedor;
+      }
+
+    });
+
+    //Al perder el foco el campo RUC, para buscar al proveedor
+    document.getElementById("formBuscarProv").addEventListener("blur", function () {
+      var rucIngresado = this.value.trim();
+      if (rucIngresado === "") return; // no hace nada si está vacío
+
+      var proveedores = JSON.parse(localStorage.getItem("proveedores")) || [];
+      var proveedor = proveedores.find(p => p.ruc === rucIngresado);
+
+      if (proveedor) {
+        document.getElementById("proveedor").value = proveedor.razonsocial;
+        document.getElementById("condicion").focus();
+      } else {
+        alertify.error("RUC no encontrado en la lista de proveedores");
+        document.getElementById("proveedor").value = "";
+        document.getElementById("ruc").focus();
+      }
+    });
+
+    //Funciones para validar RUC y N° FACTURA
+    function soloNumerosYGuiones(event) {
+      // Permitir solo números (0-9) y guiones (-)
+      const char = String.fromCharCode(event.which || event.keyCode);
+      if (!/[\d-]/.test(char)) {
+        event.preventDefault();
+      }
+    }
+
+    function validarPegado(event) {
+      const textoPegado = (event.clipboardData || window.clipboardData).getData("text");
+      if (!/^[\d-]+$/.test(textoPegado)) {
+        event.preventDefault();
+        //alertify.error("Solo se permiten números y guiones");
+      }
+    }
+
+    function limpiarCaracteresInvalidos(event) {
+      const valorOriginal = event.target.value;
+      const valorFiltrado = valorOriginal.replace(/[^\d-]/g, "");
+      if (valorOriginal !== valorFiltrado) {
+        event.target.value = valorFiltrado;
+        //alertify.warning("Se han eliminado caracteres inválidos");
+      }
+    }
+
+    // Aplica a ambos campos
+    ["ruc", "numfactura"].forEach(id => {
+      const campo = document.getElementById(id);
+      campo.addEventListener("keypress", soloNumerosYGuiones);
+      campo.addEventListener("paste", validarPegado);
+      campo.addEventListener("input", limpiarCaracteresInvalidos);
+    });
+
+    //Al perder el foco el campo COD. BARRA, para buscar el articulo
+    document.getElementById("codbarra").addEventListener("blur", function () {
+      var codIngresado = this.value.trim();
+      if (codIngresado === "") return; // no hace nada si está vacío
+
+      var articulos = JSON.parse(localStorage.getItem("articulos")) || [];
+      var articulo = articulos.find(a => a.codbarra === codIngresado);
+
+      if (articulo) {
+        document.getElementById("descripcion").value = articulo.descripcion;
+        document.getElementById("preuni").value = articulo.preventa.toLocaleString("es-PY");
+        document.getElementById("idarticulo").value = articulo.idarticulo;
+        if (articulo.tiva === 0){
+          tiva = "EXENTA";
+        }else if (articulo.tiva === 5){
+          tiva = "I.V.A. 5%";
+        }else if (articulo.tiva === 10){
+          tiva = "I.V.A. 10%";
+        }
+        document.getElementById("iva").value = tiva;
+        calcularSubtotal();
+        document.getElementById("cantidad").focus();
+      } else {
+        alertify.error("Cód. Barra no encontrado en la lista de artículos");
+        document.getElementById("descripcion").value = "";
+        document.getElementById("codbarra").focus();
+      }
+    });
+
+    //Calcular SUBTOTAL
+    function calcularSubtotal() {
+      const cantidad = parseFloat(document.getElementById("cantidad").value.replace(/\./g, "")) || 0;
+      const preuni = parseFloat(document.getElementById("preuni").value.replace(/\./g, "")) || 0;
+      const subtotal = cantidad * preuni;
+
+      // Formatear con separador de miles
+      const subtotalFormateado = subtotal.toLocaleString("es-PY");
+      document.getElementById("subtotal").value = subtotalFormateado;
+    }
+
+    // Escuchar cambios en cantidad y precio unitario
+    document.getElementById("cantidad").addEventListener("input", calcularSubtotal);
+    document.getElementById("preuni").addEventListener("input", calcularSubtotal);
+
+    //PRE. UNI. Al recibir el foco desaparecen los puntos, al perder el foco se visualizan los puntos
+    // Función para eliminar los puntos (separadores) cuando el campo tiene el foco
+    function quitarSeparadores() {
+      let preuni = document.getElementById("preuni");
+      preuni.value = preuni.value.replace(/\./g, ""); // quita los puntos
+    }
+
+    // Función para agregar los puntos (separadores) cuando el campo pierde el foco
+    function agregarSeparadores() {
+      let preuni = document.getElementById("preuni");
+      let valor = preuni.value.replace(/\D/g, ""); // quita puntos y no números
+      if (valor !== "") {
+        preuni.value = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+    }
+
+    // Event listeners
+    document.getElementById("preuni").addEventListener("focus", quitarSeparadores);
+    document.getElementById("preuni").addEventListener("blur", agregarSeparadores);
+
+    // Evento para el botón "+"
+    document.getElementById("btnAgregarArticulo").addEventListener("click", function () {
+      const codbarra = document.getElementById("codbarra").value.trim();
+      const descripcion = document.getElementById("descripcion").value.trim();
+      const cantidad = parseInt(document.getElementById("cantidad").value);
+      const preuni = document.getElementById("preuni").value.trim();
+      const subtotal = document.getElementById("subtotal").value.trim();
+      const idarticulo = document.getElementById("idarticulo").value.trim();
+      const iva = document.getElementById("iva").value.trim();
+        
+
+      if (!codbarra || !descripcion || !cantidad || !preuni || !subtotal) {
+        alertify.error("Complete todos los campos del artículo antes de agregar.");
+        return;
+      }
+
+      const tabla = $('#tablaArticulos').DataTable();
+      const botonQuitar = `<button class="btn btn-danger btn-sm quitar-fila" title="Quitar fila"><i class="bi bi-x-circle"></i></button>`;
+
+      tabla.row.add([
+        contadorItem++,
+        codbarra,
+        descripcion,
+        iva,
+        cantidad,
+        preuni,
+        subtotal,
+        botonQuitar,
+        idarticulo
+      ]).draw(false);
+
+      // Limpiar los campos del artículo
+      document.getElementById("codbarra").value = "";
+      document.getElementById("descripcion").value = "";
+      document.getElementById("iva").value = "";
+      document.getElementById("cantidad").value = 1;
+      document.getElementById("preuni").value = "";
+      document.getElementById("subtotal").value = "";
+      document.getElementById("idarticulo").value = "";
+      document.getElementById("codbarra").focus();
+    });
+
+
+    // Evento delegado para quitar filas
+    $('#tablaArticulos tbody').on('click', '.quitar-fila', function () {
+      const tabla = $('#tablaArticulos').DataTable();
+      tabla.row($(this).parents('tr')).remove().draw();
+    });
+
+    var compras = JSON.parse(localStorage.getItem("compras")) || [];
+
+    let tabla;
+    const modalNCompra = new bootstrap.Modal(document.getElementById('modalNuevaCompra'));
+
+    document.addEventListener('DOMContentLoaded',function () {
+      cargarTablaCompras();
+
+      document.getElementById('formNuevaCompra').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const nuevaCompra = {
+          idcompra: obtenerSiguienteId(compras),
+          FechaCompra: document.getElementById('compra').value.trim(),
+          producto: document.getElementById('producto').value.trim(),
+          proveedor: document.getElementById('proveedor').value.trim(),
+          unidades: document.getElementById('unidades').value.trim(),
+          PrecioUnit: document.getElementById('precio').value.trim(),
+          MontoTot: document.getElementById('monto').value.trim()
+        };
+
+        if (Object.values(nuevaCompra).some(val => val === '')) {
+          alert('Todos los campos son obligatorios');
+          return;
+        }
+
+        compras.push(nuevaCompra);
+        guardarCompras(compras);
+        this.reset();
+        tabla.row.add(nuevaCompra).draw();
+        modalNCompra.hide();
+        alertify.success("Registro guardado");
+      });
+
+      const modalECompra = new bootstrap.Modal(document.getElementById('modalEditarCompra'));
+      //EVENTO PARA EDITAR
+      document.addEventListener('click', function (e) {
+        var cargodeUsuario = localStorage.getItem("rolUsuario");
+        const idUsuarioLogueado = parseInt(localStorage.getItem("idUsuario"));
+    
+        if (e.target.closest('.btn-editar') && cargodeUsuario!='Administrador') {
+          const id = parseInt(e.target.closest('.btn-editar').dataset.id);
+          const usuario = usuarios.find(u => u.idusuario === id);
+          if (usuario.idusuario !== idUsuarioLogueado) {
+            alertify.error("No puedes editar a otros usuarios. Solo tu contraseña.");
+            return;
+          }
+
+          if (usuario) {
+            alertify.alert("ATENCIÓN","Solo puedes editar tu contraseña");
+            document.getElementById('edit_idusuario').value = usuario.idusuario;
+            document.getElementById('edit_idusuario').readOnly = true;
+
+            document.getElementById('edit_cedula').value = usuario.cedula;
+            document.getElementById('edit_cedula').readOnly = true;
+
+            document.getElementById('edit_nombre').value = usuario.nombre;
+            document.getElementById('edit_nombre').readOnly = true;
+
+            document.getElementById('edit_celular').value = usuario.celular;
+            document.getElementById('edit_celular').readOnly = true;
+
+            document.getElementById('edit_usuario').value = usuario.usuario;
+            document.getElementById('edit_usuario').readOnly = true;
+
+            document.getElementById('edit_contrasena').value = usuario.contrasena;
+
+            document.getElementById('edit_rol').value = usuario.rol;
+            document.getElementById('edit_rol').readOnly = true;
+            modalEUsuario.show();
+          }
+        }else if(e.target.closest('.btn-editar') && cargodeUsuario==='Administrador'){
+          const id = parseInt(e.target.closest('.btn-editar').dataset.id);
+          const compra = compras.find(c => c.idcompra === id);
+          if (compras) {
+            document.getElementById('edit_idcompra').value = compra.idcompra;
+            document.getElementById('edit_fecha').value = compra.FechaCompra;
+            document.getElementById('edit_producto').value = compra.producto;
+            document.getElementById('edit_proveedor').value =compra.proveedor;
+            document.getElementById('edit_unidades').value = compra.unidades;
+            document.getElementById('edit_precio').value = compra.PrecioUnit;
+            document.getElementById('edit_monto').value = compra.MontoTot;
+            modalECompra.show();
+          }
+        }
+      });
+
+      // Guardar cambios al editar-----------------------------------------------------------
+      document.getElementById('formEditarCompra').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const id = parseInt(document.getElementById('edit_idcompra').value);
+        const index = usuarios.findIndex(c => c.idcompra === id);
+        if (index !== -1) {
+          compras[index] = {
+            idcompra: id,
+            cedula: document.getElementById('edit_cedula').value.trim(),
+            nombre: document.getElementById('edit_nombre').value.trim(),
+            celular: document.getElementById('edit_celular').value.trim(),
+            usuario: document.getElementById('edit_usuario').value.trim(),
+            contrasena: document.getElementById('edit_contrasena').value.trim(),
+            rol: document.getElementById('edit_rol').value.trim()
+          };
+          guardarUsuarios(usuarios);
+          tabla.clear().rows.add(usuarios).draw();
+          modalEUsuario.hide();
+          alertify.success("Usuario actualizado");
+        }
+      });
+
+      // Evento para botón eliminar
+      document.addEventListener('click', function (e) {
+        var cargoUsuario = localStorage.getItem("rolUsuario");
+        if (e.target.closest('.btn-eliminar') && cargoUsuario!='Administrador') {
+          alertify.error("No tienes permiso de eliminar Usuarios");
+        }else if(e.target.closest('.btn-eliminar') && cargoUsuario==='Administrador'){
+          const id = parseInt(e.target.closest('.btn-eliminar').dataset.id);
+          alertify.confirm("Eliminar usuario", "¿Estás seguro de eliminar este usuario?",
+            function(){
+              usuarios = usuarios.filter(u => u.idusuario !== id);
+              guardarUsuarios(usuarios);
+              tabla.clear().rows.add(usuarios).draw();
+              alertify.success("Usuario eliminado");
+            },
+            function(){
+              alertify.error("Eliminación cancelada");
+            }
+          ).set('labels', {ok:'Sí', cancel:'No'});
+        }
+          
+      });
+    });
+    //********************************************************************************
+    function cargarTablaCompras(){
+      if($.fn.DataTable.isDataTable('#tabla_compras')){
+        $('#tabla_compras').DataTable().destroy();
+      }
+      //INICIALIZAR LA TABLA
+      tabla=new DataTable("#tabla_compras",{
+        data: compras,
+        columns: [
+          { data: 'idcompra', title: 'Id Compra' },
+          { data: 'FechaCompra', title: 'Fecha de Compra' },
+          { data: 'producto', title: 'Producto' },
+          { data: 'proveedor', title: 'Proveedor' },
+          { data: 'unidades', title: 'Unidades' },
+          { data: 'PrecioUnit', title: 'Precio Unitario' },
+          { data: 'MontoTot', title: 'Monto Total' },
+          {
+            data: null,
+            render: function (data, type, row) {
+            return `
+              <button class="btn btn-sm btn-warning me-1 btn-editar" data-id="${row.idcompras}"><i class="bi bi-pencil-square"></i></button>
+              <button class="btn btn-sm btn-danger btn-eliminar" data-id="${row.idcompras}"><i class="bi bi-trash"></i></button>
+            `;
+            }
+          }
+        ],
+        dom: 'Bfrtip',
+        buttons: [
+          {
+            extend: 'print',
+            text: '<i class="bi bi-printer"></i> Imprimir'
+          },
+          {
+            extend: 'excelHtml5',
+            text: '<i class="bi bi-filetype-xlsx"></i> Exportar a Excel'
+          },
+          {
+            extend: 'pdfHtml5',
+            text: '<i class="bi bi-filetype-pdf"></i> Exportar a PDF',
+            exportOptions: {
+              columns: [0, 1, 2, 3, 4, 5, 6] // Excluye columna de acciones (índice 7)
+            },
+            customize: function (doc) {
+              // Verifica si `content` tiene una tabla definida
+              for (let i = 0; i < doc.content.length; i++) {
+                if (doc.content[i].table !== undefined) {
+                  const tableNode = doc.content[i];
+
+                  // Si hay body, ajustamos los anchos
+                  if (tableNode.table.body && tableNode.table.body.length > 0) {
+                    const colCount = tableNode.table.body[0].length;
+                    tableNode.table.widths = Array(colCount).fill('*');
+                  }
+
+                  break; // salimos del loop luego de encontrar la tabla
+                }
+              }
+            }
+          },
+          {
+            text: '<i class="bi bi-file-earmark-plus"></i> Nueva compra',
+            className: 'btn btn-sm btn-primary',
+            action: function (e, dt, node, config) {
+              // Abrir un modal para crear un nuevo usuario
+              $('#modalNuevaCompra').modal('show');
+            }
+          }
+        ],
+        responsive: true,
+        language: spanish,
+        initComplete: function (){
+          // Aplicar clases de Bootstrap a los botones
+          $('.dt-button:contains("Nuevo usuario")')
+            .removeClass('dt-button') // elimina estilo por defecto
+            .addClass('btn btn-sm btn-primary'); // agrega estilos Bootstrap
+
+          $('.dt-button:contains("Imprimir")')
+            .removeClass('dt-button')
+            .addClass('btn btn-sm btn-info');
+
+          $('.dt-button:contains("Exportar a Excel")')
+            .removeClass('dt-button')
+            .addClass('btn btn-sm btn-success');
+
+          $('.dt-button:contains("Exportar a PDF")')
+            .removeClass('dt-button')
+            .addClass('btn btn-sm btn-danger');
+        }
+      });
+    }
+    //**********************************************************
+    function guardarCompras(data) {
+      localStorage.setItem('compras', JSON.stringify(data));
+    }
+    //**********************************************************
+    function obtenerSiguienteId(compras) {
+      if (compras.length === 0){
+        return 1;
+      }else{
+        const maxId = Math.max(...compras.map(c => c.compra || 0));
+        return maxId + 1;
+      }
+    }
+    //**********************************************************
+    // se guarda en una variable el rol de usuario que se encuentra en el localstorage
+    var cargo = localStorage.getItem("rolUsuario");
+
+    //Si el cargo es Admin, entonces remueve la clase d-none de bootstrap y muestra todo
+    if(cargo==="Administrador"){
+      document.getElementById("Usuarios").classList.remove('d-none');
+      document.getElementById("Proveedores").classList.remove('d-none');
+      document.getElementById("Compras").classList.remove('d-none');
+      document.getElementById("Bancos").classList.remove('d-none');
+      document.getElementById("Pproveedores").classList.remove('d-none');
+      document.getElementById("Ventas").classList.remove('d-none');
+      document.getElementById("Clientes").classList.remove('d-none');
+      document.getElementById("Marcas").classList.remove('d-none');
+      document.getElementById("Familias").classList.remove('d-none');
+      document.getElementById("Articulos").classList.remove('d-none');
+    }
+    if(cargo==="Codificador"){
+      document.getElementById("Usuarios").classList.remove('d-none');
+      document.getElementById("Proveedores").classList.remove('d-none');
+      document.getElementById("Compras").classList.remove('d-none');
+      document.getElementById("Pproveedores").classList.remove('d-none');
+      document.getElementById("Marcas").classList.remove('d-none');
+      document.getElementById("Familias").classList.remove('d-none');
+      document.getElementById("Articulos").classList.remove('d-none');
+    }
+    if(cargo==="Cajero"){
+      document.getElementById("Clientes").classList.remove('d-none');
+      document.getElementById("Ventas").classList.remove('d-none');
+    }
+
+  </script>
+
+</body>
+</html>
